@@ -1,10 +1,11 @@
 {
   "development": {
-    "username": "fun",
-    "password": null,
-    "database": "fun",
-    "host": "127.0.0.1",
+    "username": "postgres",
+    "password": "Crayond@12345",
+    "database": "wrapupeventz-new",
+    "host": "localhost",
     "dialect": "postgres"
+ 
   },
   "test": {
     "username": "root",
