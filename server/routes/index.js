@@ -19,4 +19,12 @@ module.exports = (app) => {
   );
   app.get("/api/get-sub-services", userController.get_sub_services
   );
+  app.get("/api/create-questions", userController.create_questions
+  );
+  app.get("/api/get-questions", userController.get_questions
+  );
+  app.get("/api/post-answers", userController.post_answers
+  );
+  app.post("/api/register", userController.create_candidate
+  );
 };
