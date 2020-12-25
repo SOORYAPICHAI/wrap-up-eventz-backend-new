@@ -5,6 +5,7 @@ const { create_sub_services, get_sub_services } = require("./sub_services");
 const { create_questions, get_questions } = require("./questions");
 const { post_answers } = require("./answers");
 const { create_candidate } = require("./register");
+const { signature, deleteFile } = require("./signature");
 module.exports = {
   user,
   create_event,
@@ -16,5 +17,7 @@ module.exports = {
   create_questions,
   get_questions,
   post_answers,
-  create_candidate
+  create_candidate,
+  signature,
+  deleteFile
 };
