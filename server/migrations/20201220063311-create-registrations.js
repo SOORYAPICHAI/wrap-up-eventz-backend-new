@@ -7,20 +7,14 @@ module.exports = {
         autoIncrement: true,
         type: Sequelize.INTEGER,
       },
-      id: {
+      registration_id: {
         type: Sequelize.UUID,
         primaryKey: true,
       },
-      event_name: {
+      sub_service_name: {
         type: Sequelize.STRING,
       },
-      event_id: {
-        type: Sequelize.UUID,
-      },
-      service_name: {
-        type: Sequelize.STRING,
-      },
-      service_id: {
+      sub_service_id: {
         type: Sequelize.UUID,
       },
       question: {

@@ -13,19 +13,36 @@ function isAlreadyExists(event_name) {
       return false;
     });
 }
+const insert_each_question_answer_into_the_table = (
+  body_params,
+  questions_answers
+) => {
+  console.log(questions_answers,"questions_answers--")
+  if(questions_answers && questions_answers.length>0){
 
+    return questions_answers.map((val) => {
+      console.log(val,"q")
+     return new Promise((resolve, reject) => {
+        models.registrations
+          .create({ ...body_params, answer: val.answer, question: val.question, registration_id: uuid4() })
+          .then((val) => {
+            resolve(val);
+          })
+          .catch((err) => {
+            console.log(err);
+            reject(null);
+          });
+      });
+    });
+  }
+};
 module.exports = {
-    create_candidate: async (req, res) => {
+  create_registration: async (req, res) => {
     // MODALS
-    const { registrations } = models;
     // REQUEST BODY
     const {
-      event_name,
-      event_id,
-      service_name,
-      service_id,
-      question,
-      answer,
+      sub_service_name,
+      sub_service_id,
       profile_pic,
       name,
       dob,
@@ -34,17 +51,12 @@ module.exports = {
       phone_number,
       city_state,
       pincode,
-      is_selected,
-      mail_sms_sent,
+      questions_answers
     } = req.body;
+    console.log(req.body.questions_answers)
     const body_params = {
-      id: uuid4(),
-      event_name: event_name,
-      event_id: event_id,
-      service_name: service_name,
-      service_id: service_id,
-      question: question,
-      answer: answer,
+      sub_service_name: sub_service_name,
+      sub_service_id: sub_service_id,
       profile_pic: profile_pic,
       name: name,
       dob: dob,
@@ -55,26 +67,35 @@ module.exports = {
       pincode: pincode,
       created_at: new Date(),
       updated_at: new Date(),
-      is_selected: is_selected,
-      mail_sms_sent: mail_sms_sent,
+      is_selected: false,
+      mail_sms_sent: false,
     };
     try {
-      if (event_name) {
-        registrations
-          .create(body_params)
-          .then((val) => {
-            res.status(200).send({
-              message: "Registered Successfully!",
-              status: 200,
-              data: val,
-            });
+      if (
+        sub_service_name &&
+        sub_service_id &&
+        questions_answers&&
+        profile_pic &&
+        name &&
+        dob &&
+        gender &&
+        email &&
+        phone_number &&
+        city_state &&
+        pincode
+      ) {
+        Promise.all(
+          insert_each_question_answer_into_the_table(
+            body_params,
+            questions_answers
+          )
+        ).then((responses) =>
+          res.status(200).send({
+            message: "Registered Successfully!",
+            status: 200,
+            data: responses,
           })
-          .catch((err) => {
-            console.log(err);
-            res
-              .status(500)
-              .send({ message: "internal error", status: 500, err: err });
-          });
+        );
       } else {
         res.status(400).send({ message: "Bad Request" });
       }
@@ -83,6 +104,101 @@ module.exports = {
         .status(500)
         .send({ message: "internal error", status: 500, error: error });
     }
+  },
+  get_all_registrations: (req, res) => {
+    // MODALS
+    // REQUEST BODY
+    const {registrations, sub_services_master, services_master,events_master} = models
+    try {
+      return new Promise((resolve, reject) => {
+        registrations
+          .findAll({
+            include:[
+                {model:sub_services_master,
+                    include:[{
+                        model:services_master,
+                        include:[{
+                          model:events_master
+                      }]
+                    }]
+                }
+            ]
+        })
+          .then((sub_services) => {
+            if (sub_services) {
+              //Events found
+              res.status(200).send({
+                message: "Registration details Fetched Successfully!",
+                status: 200,
+                data: sub_services,
+              });
+              resolve(sub_services);
+            } else {
+              res.status(400).send({ message: "Bad Request" });
+              reject(null);
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+            res
+              .status(500)
+              .send({ message: "internal error", status: 500, error: err });
+            reject(null);
+          });
+      });
+    } catch (error) {
+      res
+        .status(500)
+        .send({ message: "internal error", status: 500, error: error });
+    }
+  },
+  get_respective_registration: (req, res) => {
+    // MODALS
+    // REQUEST BODY
+    const {registration_id} = req.body
+    const {registrations, sub_services_master, services_master, events_master} = models
+    try {
+      return new Promise((resolve, reject) => {
+        registrations
+          .findAll({
+            where:{registration_id:registration_id},
+            include:[
+                {model:sub_services_master,
+                    include:[{
+                        model:services_master,
+                        include:[{
+                          model:events_master
+                      }]
+                    }]
+                }
+            ]
+        })
+          .then((sub_services) => {
+            if (sub_services) {
+              //Events found
+              res.status(200).send({
+                message: "Registration details Fetched Successfully!",
+                status: 200,
+                data: sub_services,
+              });
+              resolve(sub_services);
+            } else {
+              res.status(400).send({ message: "Bad Request" });
+              reject(null);
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+            res
+              .status(500)
+              .send({ message: "internal error", status: 500, error: err });
+            reject(null);
+          });
+      });
+    } catch (error) {
+      res
+        .status(500)
+        .send({ message: "internal error", status: 500, error: error });
+    }
   }
-
 };

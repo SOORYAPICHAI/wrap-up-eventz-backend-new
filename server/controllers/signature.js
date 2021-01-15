@@ -1,12 +1,13 @@
 // REFER THIS DOCUMENTATION
 // https://github.com/FineUploader/server-examples/blob/master/nodejs/s3/s3handler.js
+// https://docs.fineuploader.com/tag/4.0.0/features/delete.html
 
 var AWS = require("aws-sdk");
 var CryptoJS = require("crypto-js");
 
-const myBucket = "wrapupeventzimages";
-const accessKey = "AKIAIYAYQXPOJNQFHFFA";
-const secretAccessKey = "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";
+const myBucket = "wrapupeventz";
+const accessKey = "AKIAIMVTZZVKOHMPBUKA";
+const secretAccessKey = "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";
 const myKey = "da789e3b-1d9a-4ea2-a97b-e67e1be11169.jpg";
 const signedUrlExpireSeconds = 60 * 5; // In 5 minutes
 const expectedMinSize = null,
@@ -19,7 +20,7 @@ AWS.config.update({
 
 var s3 = new AWS.S3();
 // {
-// endpoint: new AWS.Endpoint('https://wrapupeventzimages.s3.ap-south-1.amazonaws.com'),
+// endpoint: new AWS.Endpoint('https://wrapupeventz.s3.ap-south-1.amazonaws.com'),
 // s3ForcePathStyle: true //prevent an SSL certificate error
 // }
 

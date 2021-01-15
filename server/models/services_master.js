@@ -6,7 +6,8 @@ module.exports = (sequelize, DataTypes) => {
     service_id: {type:DataTypes.UUID,primaryKey:true},
     created_at: DataTypes.DATE,
     updated_at: DataTypes.DATE,
-    isActive: DataTypes.BOOLEAN
+    isActive: DataTypes.BOOLEAN,
+    isHiring: DataTypes.BOOLEAN
   }, {});
   services_master.associate = function(models) {
     // associations can be defined here

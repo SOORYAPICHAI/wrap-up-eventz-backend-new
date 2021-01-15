@@ -3,11 +3,9 @@ module.exports = (sequelize, DataTypes) => {
   const registrations = sequelize.define(
     "registrations",
     {
-      id: {type:DataTypes.UUID,primaryKey:true},
-      event_name: DataTypes.STRING,
-      event_id: DataTypes.UUID,
-      service_name: DataTypes.STRING,
-      service_id: DataTypes.UUID,
+      registration_id: {type:DataTypes.UUID,primaryKey:true},
+      sub_service_name: DataTypes.STRING,
+      sub_service_id: DataTypes.UUID,
       question: DataTypes.STRING,
       answer: DataTypes.STRING,
       profile_pic: DataTypes.STRING,
@@ -26,7 +24,12 @@ module.exports = (sequelize, DataTypes) => {
     {}
   );
   registrations.associate = function (models) {
-    // associations can be defined here
+        // associations can be defined here
+        registrations.belongsTo(models.sub_services_master, {
+          onDelete: 'CASCADE',
+          foreignKey: 'sub_service_id'
+        });
+        
   };
   return registrations;
 };

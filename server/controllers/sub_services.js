@@ -28,7 +28,7 @@ module.exports = {
       isActive: true,
     };
     try {
-      if (sub_service_name) {
+      if (sub_service_name && service_id) {
         if (await isAlreadyExists(sub_service_name)) {
           res.status(200).send({
             message: `Service Name:${sub_service_name} Already Exists!`,
@@ -97,6 +97,71 @@ module.exports = {
             reject(null);
           });
       });
+    } catch (error) {
+      res
+        .status(500)
+        .send({ message: "internal error", status: 500, error: error });
+    }
+  },
+  update_sub_services: async (req, res) => {
+    // MODALS
+    // REQUEST BODY
+    const { sub_service_name, sub_service_id } = req.body;
+    const body_params = {
+      sub_service_name: sub_service_name,
+      updated_at: new Date(),
+    };
+    try {
+      if (sub_service_name) {
+        sub_services_master
+            .update(body_params,{where:{sub_service_id:sub_service_id}})
+            .then((val) => {
+              res.status(200).send({
+                message: "Sub - Service Updated Successfully!",
+                status: 200,
+                data: val,
+              });
+            })
+            .catch((err) => {
+              console.log(err);
+              res
+                .status(500)
+                .send({ message: "internal error", status: 500, err: err });
+            });
+      } else {
+        res.status(400).send({ message: "Bad Request" });
+      }
+    } catch (error) {
+      res
+        .status(500)
+        .send({ message: "internal error", status: 500, error: error });
+    }
+  },
+  delete_sub_services: async (req, res) => {
+    // MODALS
+    // REQUEST BODY
+    const { sub_service_id } = req.body;
+
+    try {
+      if (sub_service_id) {
+        sub_services_master
+            .destroy({where:{sub_service_id:sub_service_id}})
+            .then((val) => {
+              res.status(200).send({
+                message: "Sub - Service Deleted Successfully!",
+                status: 200,
+                data: val,
+              });
+            })
+            .catch((err) => {
+              console.log(err);
+              res
+                .status(500)
+                .send({ message: "internal error", status: 500, err: err });
+            });
+      } else {
+        res.status(400).send({ message: "Bad Request" });
+      }
     } catch (error) {
       res
         .status(500)

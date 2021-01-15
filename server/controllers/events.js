@@ -31,7 +31,7 @@ module.exports = {
       if (event_name) {
         if (await isAlreadyExists(event_name)) {
           res.status(200).send({
-            message: `Event_Name:${event_name} Already Exists!`,
+            message: `Event Name:${event_name} Already Exists!`,
             status: 200,
           });
         } else {
@@ -67,13 +67,94 @@ module.exports = {
     const {} = req.body;
     try {
       return new Promise((resolve, reject) => {
-        models.events_master
+        events_master
           .findAll()
           .then((events) => {
             if (events) {
               //Events found
               res.status(200).send({
                 message: "Event Fetched Successfully!",
+                status: 200,
+                data: events,
+              });
+              resolve(events);
+            } else {
+              res.status(400).send({ message: "Bad Request" });
+              reject(null);
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+            res
+              .status(500)
+              .send({ message: "internal error", status: 500, error: error });
+            reject(null);
+          });
+      });
+    } catch (error) {
+      res
+        .status(500)
+        .send({ message: "internal error", status: 500, error: error });
+    }
+  },
+  update_events: (req, res) => {
+    // MODALS
+    const { events_master } = models;
+    // REQUEST BODY
+    const { event_id, event_name } = req.body;
+    const body_params = {
+      event_name: event_name,
+      event_id: event_id,
+      // created_at: new Date(),
+      updated_at: new Date(),
+    };
+    try {
+      return new Promise((resolve, reject) => {
+        events_master
+          .update(body_params, { where: { event_id: event_id } })
+          .then((events) => {
+            if (events) {
+              //Events found
+              res.status(200).send({
+                message: "Event Updated Successfully!",
+                status: 200,
+                data: events,
+              });
+              resolve(events);
+            } else {
+              res.status(400).send({ message: "Bad Request" });
+              reject(null);
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+            res
+              .status(500)
+              .send({ message: "internal error", status: 500, error: error });
+            reject(null);
+          });
+      });
+    } catch (error) {
+      res
+        .status(500)
+        .send({ message: "internal error", status: 500, error: error });
+    }
+  },
+  delete_events: (req, res) => {
+    // MODALS
+    const { events_master } = models;
+    // REQUEST BODY
+    const { event_id } = req.body;
+
+    try {
+      return new Promise((resolve, reject) => {
+        events_master
+          .destroy({ where: { event_id: event_id } })
+          .then((events) => {
+            if (events) {
+              //Events found
+              res.status(200).send({
+                message: "Event Deleted Successfully!",
                 status: 200,
                 data: events,
               });
