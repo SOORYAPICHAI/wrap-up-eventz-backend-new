@@ -7,14 +7,6 @@ module.exports = {
         autoIncrement: true,
         type: Sequelize.INTEGER
       },
-      event_id: {
-        type: Sequelize.UUID,
-        onDelete: 'CASCADE',
-        references:{          
-          model:'events_masters',
-          key:'event_id'
-        }
-      },
       service_name: {
         type: Sequelize.STRING
       },

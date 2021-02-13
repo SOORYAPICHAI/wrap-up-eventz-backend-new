@@ -25,6 +25,8 @@ const {
   get_respective_registration,
 } = require("./register");
 const { signature, deleteFile } = require("./signature");
+const { get_careeropenings,update_careeropenings } = require("./careers_openings");
+const {get_header_data} = require("./page_header_data")
 module.exports = {
   user,
   create_event,
@@ -47,4 +49,7 @@ module.exports = {
   get_respective_registration,
   signature,
   deleteFile,
+  get_careeropenings,
+  update_careeropenings,
+  get_header_data
 };

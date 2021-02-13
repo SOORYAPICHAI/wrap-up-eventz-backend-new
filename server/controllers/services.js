@@ -21,7 +21,7 @@ module.exports = {
     // REQUEST BODY
     const { service_name, event_id } = req.body;
     const body_params = {
-      event_id: event_id,
+      // event_id: event_id,
       service_name: service_name,
       service_id: uuid4(),
       created_at: new Date(),
@@ -63,14 +63,14 @@ module.exports = {
   },
   get_services: (req, res) => {
     // MODALS
-    const { services_master, events_master } = models;
+    const { services_master, sub_services_master } = models;
     // REQUEST BODY
     const {} = req.body;
     try {
       return new Promise((resolve, reject) => {
         services_master
           .findAll({
-            include: [{ model: events_master }],
+            include: [{ model: sub_services_master }],
           })
           .then((services) => {
             if (services) {

@@ -9,10 +9,10 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   events_master.associate = function(models) {
     // associations can be defined here
-    events_master.hasMany(models.services_master, {
-      onDelete: 'CASCADE',
-      foreignKey: 'event_id'
-    });
+    // events_master.hasMany(models.services_master, {
+    //   onDelete: 'CASCADE',
+    //   foreignKey: 'event_id'
+    // });
   };
   return events_master;
 };

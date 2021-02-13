@@ -24,7 +24,19 @@ module.exports = (app) => {
   app.post("/api/post-answers", userController.post_answers);
   app.post("/api/register", userController.create_registration);
   app.get("/api/all-registers", userController.get_all_registrations);
-  app.get("/api/get-register-based-id", userController.get_respective_registration);
+  app.get(
+    "/api/get-register-based-id",
+    userController.get_respective_registration
+  );
   app.post("/api/signature", userController.signature);
+  app.get(
+    "/api/get-careeropenings",
+    userController.get_careeropenings
+  );
+  app.get(
+    "/api/get-header-data",
+    userController.get_header_data
+  );
+  app.post("/api/update-careeropenings", userController.update_careeropenings);
   app.delete("/api/delete/*", userController.deleteFile);
 };
